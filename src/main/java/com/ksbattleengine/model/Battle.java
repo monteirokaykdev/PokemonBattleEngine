@@ -63,17 +63,23 @@ public class Battle {
 
             Move selectedMove = attacker.getSpecies().getMove(choice - 1);
 
-            int damage = selectedMove.getPower();
             
             if(accuracyCheck(selectedMove)){
-                if(criticalCheck()){
-                    System.out.println("It was a Critical Hit!");
-                    damage *= 2;
+
+                boolean critical = criticalCheck();
+
+                boolean stab = DamageCalculator.isStab(attacker, selectedMove);
+
+                if(critical){
+                    System.out.println("A critical hit!");
                 }
-                if(stabCheck(attacker, selectedMove)){
-                    System.out.println("STAB Bonus!");
-                    damage = (int) (damage * 1.5);
+
+                if(stab){
+                    System.out.println("STAB!");
                 }
+
+                int damage = DamageCalculator.calculateDamage(attacker, target, selectedMove, critical);
+
                 attacker.attack(target, selectedMove, damage);
             }else{
                 System.out.println(
@@ -131,7 +137,4 @@ public class Battle {
         return ThreadLocalRandom.current().nextInt(1,101) <= 6;
     }
 
-    private boolean stabCheck(Pokemon attacker, Move move){
-        return attacker.getSpecies().getPrimaryType() == move.getType();
-    }
 }
