@@ -42,7 +42,7 @@ public class PokemonSpecies {
         for (int i = 0; i < moves.size(); i++) {
             System.out.println(
             (i + 1) + " - " +
-            moves.get(i).getName()
+            moves.get(i).getName() + " - Power:" + moves.get(i).getPower() + " - Accuracy:" + moves.get(i).getAccuracy()
         );
     }
 }

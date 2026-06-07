@@ -27,14 +27,14 @@ public class Pokemon {
         }
     }
 
-    public void attack(Pokemon target, Move move){
+    public void attack(Pokemon target, Move move, int damage){
         System.out.println(
         species.getName() +
         " used " +
         move.getName()
         );
 
-        target.takeDamage(move.getPower());
+        target.takeDamage(damage);
 
         System.out.println(
         target.getSpecies().getName() +
@@ -46,5 +46,9 @@ public class Pokemon {
     public boolean isFainted() {
         return currentHP <= 0;
     }
-    
+
+    public PokemonSpecies getSpecies() {
+        return this.species;
+    }
+
 }
