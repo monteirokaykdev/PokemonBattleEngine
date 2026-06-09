@@ -3,6 +3,8 @@ package com.ksbattleengine.model;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.ksbattleengine.enums.MoveCategory;
+
 public class Battle {
 
     private Pokemon pokemon1;
@@ -34,10 +36,26 @@ public class Battle {
 
             executeAction(second, first);
 
+
             if (first.isFainted()) {
                 System.out.println(first.getSpecies().getName() + " fainted!");
                 break;
             }
+
+            StatusManager.applyTurnEndStatusEffects(pokemon1);
+            StatusManager.applyTurnEndStatusEffects(pokemon2);
+
+            if (first.isFainted()) {
+                System.out.println(first.getSpecies().getName() + " fainted!");
+                break;
+            }
+
+            if (second.isFainted()) {
+                System.out.println(second.getSpecies().getName() + " fainted!");
+                break;
+            }
+
+
             turn++;
         }
 
@@ -63,12 +81,33 @@ public class Battle {
 
             Move selectedMove = attacker.getSpecies().getMove(choice - 1);
 
-            
-            if(accuracyCheck(selectedMove)){
+            if(!StatusManager.canAct(attacker)){
+                return;
+            }
 
-                boolean critical = criticalCheck();
+            
+            if(BattleRNG.accuracyCheck(selectedMove)){
+
+                if (selectedMove.getCategory() == MoveCategory.STATUS) {
+                StatusManager.applyStatusEffect(target, selectedMove);
+                System.out.println("It's a status move!");
+                return;
+                }
+
+                boolean critical = BattleRNG.criticalCheck();
 
                 boolean stab = DamageCalculator.isStab(attacker, selectedMove);
+
+                int damage = DamageCalculator.calculateDamage(attacker, target, selectedMove, critical);
+
+                attacker.attack(target, selectedMove, damage);
+
+                StatusManager.applyStatusEffect(target, selectedMove);
+
+                double typeEffectiveness = TypeChart.getTypeEffectiveness(
+                    selectedMove.getType(),
+                    target.getSpecies()
+                );
 
                 if(critical){
                     System.out.println("A critical hit!");
@@ -77,11 +116,30 @@ public class Battle {
                 if(stab){
                     System.out.println("STAB!");
                 }
+                
+                if(typeEffectiveness > 1.0 && typeEffectiveness < 3.0){
+                    System.out.println("It's super effective!");
+                }else if(typeEffectiveness < 1.0){
+                    System.out.println("It's not very effective...");
+                }else if(typeEffectiveness == 0.0){
+                    System.out.println("It has no effect...");
+                }else if(typeEffectiveness >= 3.0){
+                    System.out.println("It's extremely effective!");
+                }else if(typeEffectiveness < 0.5){
+                    System.out.println("It's barely effective...");
+                }
 
-                int damage = DamageCalculator.calculateDamage(attacker, target, selectedMove, critical);
 
-                attacker.attack(target, selectedMove, damage);
+
+                System.out.println("Type Effectiveness: " + typeEffectiveness);
+                System.out.println("Status: " + target.getStatus());
+
+                return;
+
             }else{
+                if(selectedMove.getCategory() == MoveCategory.STATUS){
+                    System.out.println("But it failed!");
+                }
                 System.out.println(
                 attacker.getSpecies().getName()
                 + "'s "
@@ -89,10 +147,10 @@ public class Battle {
                 + " missed!"
                 );
             }
+                return;
+            }
 
-            return;
         }
-    }
 
     private Pokemon getSpeedPrio(Pokemon p1,Pokemon p2){
         int speed1 = p1.getSpecies().getBaseStats().getSpeed();
@@ -123,18 +181,4 @@ public class Battle {
     System.out.println("TURN " + turn);
     System.out.println("====================");
     }
-
-    private boolean accuracyCheck(Move move) {
-
-        int roll =
-        ThreadLocalRandom.current()
-                         .nextInt(1, 101);
-
-    return roll <= move.getAccuracy();
-    }
-
-    private boolean criticalCheck(){
-        return ThreadLocalRandom.current().nextInt(1,101) <= 6;
-    }
-
 }

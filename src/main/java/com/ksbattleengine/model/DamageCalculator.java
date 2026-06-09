@@ -1,8 +1,7 @@
 package com.ksbattleengine.model;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 import com.ksbattleengine.enums.MoveCategory;
+import com.ksbattleengine.enums.Status;
 
 public class DamageCalculator {
 
@@ -32,10 +31,14 @@ public class DamageCalculator {
             modifier *= 1.5;
         }
 
+        if (attacker.getStatus() == Status.BURN &&move.getCategory() == MoveCategory.PHYSICAL) {
+            attack /= 2;
+        }
+
         double typeEffectiveness =
         TypeChart.getTypeEffectiveness(
             move.getType(),
-            target.getSpecies().getPrimaryType()
+            target.getSpecies()
         );
 
         if (typeEffectiveness == 0.0) {
@@ -48,17 +51,13 @@ public class DamageCalculator {
 
         modifier *= typeEffectiveness;
 
-        modifier *= randomFactor();
+        modifier *= BattleRNG.damageRandomFactor();
 
         return Math.max(1, (int) (damage * modifier));
     }
 
     public static boolean isStab(Pokemon attacker, Move move) {
         return attacker.getSpecies().getPrimaryType() == move.getType();
-    }
-
-    private static double randomFactor() {
-        return ThreadLocalRandom.current().nextDouble(0.85, 1.01);
     }
 
     private static int getAttackStat(Pokemon attacker, Move move) {
@@ -84,4 +83,13 @@ public class DamageCalculator {
 
         return 1;
     }
+
+	public static int calculateSelfDamage(Pokemon pokemon) {
+        int level = pokemon.getLevel();
+        int hp = pokemon.getSpecies().getBaseStats().getHp();
+
+        double damage = (((2 * level / 5.0 + 2) * hp * 0.5) / 50) + 2;
+
+        return Math.max(1, (int) damage);
+	}
 }

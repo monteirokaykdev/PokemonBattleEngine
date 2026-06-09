@@ -16,19 +16,53 @@ public class PokemonSpecies {
 
     private String name;
     private PokemonType primaryType;
+    private PokemonType secondaryType;
     private Stats baseStats;
 
     private List<Ability> abilities;
     private List<Move> moves;
 
-    public PokemonSpecies(List<Ability> abilities, Stats baseStats, List<Move> moves, String name, int pokedexNumber, PokemonType primaryType) {
+    // Monotype
+    public PokemonSpecies(
+        List<Ability> abilities,
+        Stats baseStats,
+        List<Move> moves,
+        String name,
+        int pokedexNumber,
+        PokemonType primaryType
+    ) {
         this.abilities = abilities;
         this.baseStats = baseStats;
         this.moves = moves;
         this.name = name;
         this.pokedexNumber = pokedexNumber;
         this.primaryType = primaryType;
+        this.secondaryType = null;
     }
+
+    // Dual Type
+    public PokemonSpecies(
+        List<Ability> abilities,
+        Stats baseStats,
+        List<Move> moves,
+        String name,
+        int pokedexNumber,
+        PokemonType primaryType,
+        PokemonType secondaryType
+    ) {
+
+        this(
+            abilities,
+            baseStats,
+            moves,
+            name,
+            pokedexNumber,
+            primaryType
+        );
+
+        this.secondaryType = secondaryType;
+    }
+
 
     public Move getMove(int moveIndex) {
     if (moveIndex < 0 || moveIndex >= moves.size()) {

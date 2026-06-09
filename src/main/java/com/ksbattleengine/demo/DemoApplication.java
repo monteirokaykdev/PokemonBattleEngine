@@ -5,6 +5,7 @@
 
 	import com.ksbattleengine.enums.MoveCategory;
 	import com.ksbattleengine.enums.PokemonType;
+	import com.ksbattleengine.enums.Status;
 	import com.ksbattleengine.model.Ability;
 	import com.ksbattleengine.model.Battle;
 	import com.ksbattleengine.model.Move;
@@ -37,17 +38,28 @@
 				PokemonType.FIRE,
 				20,
 				1,
-				MoveCategory.SPECIAL
+				MoveCategory.SPECIAL,
+				Status.NONE
 			);
 
-			Stats stats = new Stats(39, 52, 43, 60, 50, 100);
+			Move Will_O_Wisp = new Move(
+				"Will O Wisp",
+				PokemonType.FIRE,
+				0,
+				100,
+				MoveCategory.STATUS,
+				Status.BURN
+			);
+
+			Stats stats = new Stats(200, 52, 43, 60, 50, 100);
 
 			return new PokemonSpecies(
 				List.of(blaze),
 				stats,
-				List.of(ember),
+				List.of(ember, Will_O_Wisp),
 				"Charmander",
 				4,
+				PokemonType.FIRE,
 				PokemonType.FIRE
 			);
 		}
@@ -60,8 +72,10 @@
 				PokemonType.WATER,
 				20,
 				100,
-				MoveCategory.SPECIAL
+				MoveCategory.SPECIAL,
+				Status.NONE
 			);
+
 
 			Stats stats = new Stats(44, 48, 65, 50, 64, 100);
 
