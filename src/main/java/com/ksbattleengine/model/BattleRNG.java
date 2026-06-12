@@ -14,6 +14,10 @@ public final class BattleRNG {
     }
 
     public static boolean accuracyCheck(Move move) {
+        if(move.getAccuracy() == -1){
+            return true;
+        }
+
         return chance(move.getAccuracy());
     }
 

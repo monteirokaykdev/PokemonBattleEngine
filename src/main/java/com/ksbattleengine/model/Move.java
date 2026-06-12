@@ -1,7 +1,11 @@
 package com.ksbattleengine.model;
 
 import com.ksbattleengine.enums.PokemonType;
+import com.ksbattleengine.enums.StatType;
 import com.ksbattleengine.enums.Status;
+
+import java.util.List;
+
 import com.ksbattleengine.enums.MoveCategory;
 
 import lombok.AllArgsConstructor;
@@ -30,6 +34,10 @@ public class Move {
     private int statusChance;
 
     private int pp;
+
+    private List<MoveStatChange> statChanges;
+
+    private boolean isTargetSelf;
 
 
 }

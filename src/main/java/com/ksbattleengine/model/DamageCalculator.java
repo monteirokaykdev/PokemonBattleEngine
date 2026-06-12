@@ -1,6 +1,7 @@
 package com.ksbattleengine.model;
 
 import com.ksbattleengine.enums.MoveCategory;
+import com.ksbattleengine.enums.StatType;
 import com.ksbattleengine.enums.Status;
 
 public class DamageCalculator {
@@ -62,11 +63,11 @@ public class DamageCalculator {
 
     private static int getAttackStat(Pokemon attacker, Move move) {
         if (move.getCategory() == MoveCategory.PHYSICAL) {
-            return attacker.getSpecies().getBaseStats().getAttack();
+            return (int) (attacker.getFinalStats().getAttack() * attacker.getStatStages().getMultiplier(StatType.ATTACK));
         }
 
         if (move.getCategory() == MoveCategory.SPECIAL) {
-            return attacker.getSpecies().getBaseStats().getSpecialAttack();
+            return (int) (attacker.getFinalStats().getSpecialAttack() * attacker.getStatStages().getMultiplier(StatType.SPECIAL_ATTACK));
         }
 
         return 0;
@@ -74,11 +75,11 @@ public class DamageCalculator {
 
     private static int getDefenseStat(Pokemon target, Move move) {
         if (move.getCategory() == MoveCategory.PHYSICAL) {
-            return target.getSpecies().getBaseStats().getDefense();
+            return (int) (target.getFinalStats().getDefense() * target.getStatStages().getMultiplier(StatType.DEFENSE));
         }
 
         if (move.getCategory() == MoveCategory.SPECIAL) {
-            return target.getSpecies().getBaseStats().getSpecialDefense();
+            return (int) (target.getFinalStats().getDefense() * target.getStatStages().getMultiplier(StatType.SPECIAL_DEFENSE));
         }
 
         return 1;
@@ -86,7 +87,7 @@ public class DamageCalculator {
 
 	public static int calculateSelfDamage(Pokemon pokemon) {
         int level = pokemon.getLevel();
-        int hp = pokemon.getSpecies().getBaseStats().getHp();
+        int hp = pokemon.getFinalStats().getHp();
 
         double damage = (((2 * level / 5.0 + 2) * hp * 0.5) / 50) + 2;
 

@@ -4,14 +4,20 @@
 	import java.util.List;
 
 	import com.ksbattleengine.enums.MoveCategory;
+	import com.ksbattleengine.enums.Nature;
 	import com.ksbattleengine.enums.PokemonType;
+	import com.ksbattleengine.enums.StatType;
 	import com.ksbattleengine.enums.Status;
 	import com.ksbattleengine.model.Ability;
 	import com.ksbattleengine.model.Battle;
+	import com.ksbattleengine.model.IndividualValues;
 	import com.ksbattleengine.model.Move;
-	import com.ksbattleengine.model.Pokemon;
+import com.ksbattleengine.model.MoveStatChange;
+import com.ksbattleengine.model.Pokemon;
 	import com.ksbattleengine.model.PokemonSpecies;
 	import com.ksbattleengine.model.Stats;
+	import com.ksbattleengine.model.EffortValues;
+
 
 
 	//@SpringBootApplication
@@ -19,9 +25,13 @@
 
 		public static void main(String[] args) {
 			//SpringApplication.run(DemoApplication.class, args);
-			
-			Pokemon charmander1 = new Pokemon(createCharmander(), 5);
-			Pokemon squirtle1 = new Pokemon(createSquirtle(), 5);
+
+
+			IndividualValues ivs = new IndividualValues(31, 31, 31, 31, 31, 31);
+			EffortValues evs = new EffortValues(0, 252, 0, 0, 0, 252);
+
+			Pokemon charmander1 = new Pokemon(createCharmander(), 10,Nature.ADAMANT, ivs, evs);
+			Pokemon squirtle1 = new Pokemon(createSquirtle(), 10, Nature.MODEST, ivs, evs);
 
 			Battle battle = new Battle(charmander1, squirtle1);
 
@@ -37,9 +47,14 @@
 				"Ember",
 				PokemonType.FIRE,
 				20,
-				1,
-				MoveCategory.SPECIAL,
-				Status.NONE
+				100,
+				MoveCategory.PHYSICAL,
+				Status.NONE,
+				0,
+				100,
+				25,
+				List.of(),
+				false
 			);
 
 			Move Will_O_Wisp = new Move(
@@ -48,15 +63,39 @@
 				0,
 				100,
 				MoveCategory.STATUS,
-				Status.BURN
+				Status.BURN,
+				0,
+				100,
+				25,
+				List.of(),
+				false
 			);
 
-			Stats stats = new Stats(200, 52, 43, 60, 50, 100);
+			Move swordsDance = new Move(
+				"Swords Dance",
+				PokemonType.NORMAL,
+				0,
+				-1,
+				MoveCategory.STATUS,
+				Status.NONE,
+				0,
+				0,
+				20,
+				List.of(
+					new MoveStatChange(
+						StatType.ATTACK,
+						2
+					)
+				),
+				true
+			);
+
+			Stats stats = new Stats(2000, 52, 43, 60, 50, 100);
 
 			return new PokemonSpecies(
 				List.of(blaze),
 				stats,
-				List.of(ember, Will_O_Wisp),
+				List.of(ember, Will_O_Wisp,swordsDance),
 				"Charmander",
 				4,
 				PokemonType.FIRE,
@@ -73,7 +112,13 @@
 				20,
 				100,
 				MoveCategory.SPECIAL,
-				Status.NONE
+				Status.NONE,
+				0,
+				0,
+				25,
+				List.of(),
+				false
+				
 			);
 
 

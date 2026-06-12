@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.ksbattleengine.enums.MoveCategory;
+import com.ksbattleengine.enums.StatType;
 
 public class Battle {
 
@@ -89,9 +90,16 @@ public class Battle {
             if(BattleRNG.accuracyCheck(selectedMove)){
 
                 if (selectedMove.getCategory() == MoveCategory.STATUS) {
-                StatusManager.applyStatusEffect(target, selectedMove);
-                System.out.println("It's a status move!");
-                return;
+                    StatusManager.applyStatusEffect(target, selectedMove);
+
+                    StatManager.applyStatChange(
+                        attacker,
+                        target,
+                        selectedMove
+                    );
+
+                    System.out.println("It's a status move!");
+                    return;
                 }
 
                 boolean critical = BattleRNG.criticalCheck();
@@ -101,6 +109,7 @@ public class Battle {
                 int damage = DamageCalculator.calculateDamage(attacker, target, selectedMove, critical);
 
                 attacker.attack(target, selectedMove, damage);
+                StatManager.applyStatChange(attacker, target, selectedMove);
 
                 StatusManager.applyStatusEffect(target, selectedMove);
 
@@ -133,6 +142,8 @@ public class Battle {
 
                 System.out.println("Type Effectiveness: " + typeEffectiveness);
                 System.out.println("Status: " + target.getStatus());
+                System.out.println("Attack Damage: " + attacker.getFinalStats().getAttack());
+                System.out.println("Stage: " + attacker.getStatStages().getMultiplier(StatType.ATTACK));
 
                 return;
 
@@ -153,8 +164,8 @@ public class Battle {
         }
 
     private Pokemon getSpeedPrio(Pokemon p1,Pokemon p2){
-        int speed1 = p1.getSpecies().getBaseStats().getSpeed();
-        int speed2 = p2.getSpecies().getBaseStats().getSpeed();
+        int speed1 =  (int) (p1.getFinalStats().getSpeed() * p1.getStatStages().getMultiplier(StatType.SPEED));
+        int speed2 =  (int) (p2.getFinalStats().getSpeed() * p2.getStatStages().getMultiplier(StatType.SPEED));
 
         if(speed1 > speed2){
             return p1;

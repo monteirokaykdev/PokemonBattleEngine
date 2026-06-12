@@ -41,23 +41,26 @@ public enum Nature {
     }
 
     public double getMultiplier(StatType stat) {
-
-        if (stat == increasedStat) {
+        if (boosts(stat)) {
             return 1.1;
         }
 
-        if (stat == decreasedStat) {
+        if (lowers(stat)) {
             return 0.9;
         }
 
         return 1.0;
     }
 
-    public StatType getIncreasedStat() {
-        return increasedStat;
+    public boolean boosts(StatType stat) {
+        return stat != null && stat == increasedStat;
     }
 
-    public StatType getDecreasedStat() {
-        return decreasedStat;
+    public boolean lowers(StatType stat) {
+        return stat != null && stat == decreasedStat;
+    }
+
+    public boolean isNeutral() {
+        return increasedStat == null && decreasedStat == null;
     }
 }

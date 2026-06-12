@@ -91,7 +91,7 @@ public class StatusManager {
         if (pokemon.getStatus() == Status.BURN) {
             int burnDamage = Math.max(
                 1,
-                pokemon.getSpecies().getBaseStats().getHp() / 16
+                pokemon.getFinalStats().getHp() / 16
             );
 
             pokemon.takeDamage(burnDamage);
@@ -113,7 +113,7 @@ public class StatusManager {
         if (pokemon.getStatus() == Status.POISON) {
             int poisonDamage = Math.max(
                 1,
-                pokemon.getSpecies().getBaseStats().getHp() / 8
+                pokemon.getFinalStats().getHp() / 8
             );
 
             pokemon.takeDamage(poisonDamage);
@@ -135,7 +135,7 @@ public class StatusManager {
         if (pokemon.getStatus() == Status.BADLY_POISON) {
             int toxicDamage = Math.max(
                 1,
-                (pokemon.getSpecies().getBaseStats().getHp() / 16) * pokemon.getToxicCounter()
+                (pokemon.getFinalStats().getHp() / 16) * pokemon.getToxicCounter()
             );
 
             pokemon.takeDamage(toxicDamage);
