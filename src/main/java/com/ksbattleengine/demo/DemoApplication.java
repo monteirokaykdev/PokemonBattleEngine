@@ -16,7 +16,8 @@ import com.ksbattleengine.model.MoveStatChange;
 import com.ksbattleengine.model.Pokemon;
 	import com.ksbattleengine.model.PokemonSpecies;
 	import com.ksbattleengine.model.Stats;
-	import com.ksbattleengine.model.EffortValues;
+import com.ksbattleengine.model.Team;
+import com.ksbattleengine.model.EffortValues;
 
 
 
@@ -30,10 +31,29 @@ import com.ksbattleengine.model.Pokemon;
 			IndividualValues ivs = new IndividualValues(31, 31, 31, 31, 31, 31);
 			EffortValues evs = new EffortValues(0, 252, 0, 0, 0, 252);
 
-			Pokemon charmander1 = new Pokemon(createCharmander(), 10,Nature.ADAMANT, ivs, evs);
-			Pokemon squirtle1 = new Pokemon(createSquirtle(), 10, Nature.MODEST, ivs, evs);
+			Team team1 = new Team(
+				List.of(
+					new Pokemon(createCharmander(), 10, Nature.ADAMANT, ivs, evs),
+					new Pokemon(createCharmander(), 10, Nature.JOLLY, ivs, evs),
+					new Pokemon(createCharmander(), 10, Nature.BRAVE, ivs, evs),
+					new Pokemon(createCharmander(), 10, Nature.HARDY, ivs, evs),
+					new Pokemon(createCharmander(), 10, Nature.LONELY, ivs, evs),
+					new Pokemon(createCharmander(), 10, Nature.NAUGHTY, ivs, evs)
+				)
+			);
 
-			Battle battle = new Battle(charmander1, squirtle1);
+			Team team2 = new Team(
+				List.of(
+					new Pokemon(createSquirtle(), 10, Nature.MODEST, ivs, evs),
+					new Pokemon(createSquirtle(), 10, Nature.TIMID, ivs, evs),
+					new Pokemon(createSquirtle(), 10, Nature.CALM, ivs, evs),
+					new Pokemon(createSquirtle(), 10, Nature.BOLD, ivs, evs),
+					new Pokemon(createSquirtle(), 10, Nature.MILD, ivs, evs),
+					new Pokemon(createSquirtle(), 10, Nature.QUIET, ivs, evs)
+				)
+			);
+
+			Battle battle = new Battle(team1, team2);
 
 			battle.start();
 
