@@ -304,10 +304,10 @@ Charmander HP: 181
 * [x] Paralysis
 * [x] Confusion
 * [x] Status immunities
+* [X] Stat stages (+Attack, -Defense, etc.)
 
 ### Planned Features
 
-* [ ] Stat stages (+Attack, -Defense, etc.)
 * [ ] Weather system
 * [ ] Ability effects
 * [ ] Held items
